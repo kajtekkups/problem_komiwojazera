@@ -41,11 +41,34 @@ TEST(CostMatrixTest, get_min_values_in_col){
     CostMatrix przyklad1(x1);
 
     std::vector<cost_t> value = {1, 2, 3};
-    std::vector<cost_t> value1 = {1, 2, 3, -1};
+    std::vector<cost_t> value1 = {1, 2, 3, -2};
 
     EXPECT_EQ(przyklad.get_min_values_in_cols(), value);
     EXPECT_EQ(przyklad1.get_min_values_in_cols(), value1);
 }
+
+TEST(CostMatrixTest, reduce_row){
+    cost_matrix_t x1 =
+            {{2, 3, 4, 1},
+             {1, 2, 3, 3},
+             {3, 4, 5, 2}
+            };
+
+    cost_matrix_t wynik =
+            {{1, 2, 3, 0},
+             {0, 1, 2, 2},
+             {1, 2, 3, 0}
+            };
+    CostMatrix przyklad(x1);
+    CostMatrix przyklad1(x1);
+
+    przyklad.reduce_rows();
+    ASSERT_EQ(przyklad.get_matrix(), wynik);
+    ASSERT_EQ(przyklad1.reduce_rows(), 4);
+}
+
+
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

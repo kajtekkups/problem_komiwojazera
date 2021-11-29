@@ -46,7 +46,16 @@ std::vector<cost_t> CostMatrix::get_min_values_in_rows() const {
  * @return Sum of values reduced in rows.
  */
 cost_t CostMatrix::reduce_rows() {
-    throw;  // TODO: Implement it!
+    std::vector<cost_t> min_value_vector =CostMatrix::get_min_values_in_rows(); //tworzy wektor minimalnych wartosci
+    int row_number = 0; //zmienna pomocnicza
+    int row_size = int(matrix_[0].size());
+    for(const auto& row: matrix_){
+        for(int element = 0; element < row_size; element++){
+            matrix_[row_number][element] -= min_value_vector[row_number];
+        }
+        row_number++;
+    }
+    return std::accumulate(min_value_vector.begin(), min_value_vector.end(), 0);
 }
 
 /**
@@ -61,14 +70,14 @@ std::vector<cost_t> CostMatrix::get_min_values_in_cols() const {
     //podwojna petla sprawdzajaca najpierw w ktorej kolumnie jetesmy
     //nastepnie najmniejsza wartosc w kazdej kolumnie
     for(int kolumna = 0; kolumna < column_number; kolumna++){
-        int wartosc_min_kolumna = matrix_[0][0]; //pomocnicza zmienna
+        int wartosc_min_kolumna = matrix_[0][kolumna]; //pomocnicza zmienna
 
         for(auto row: matrix_){
             if(wartosc_min_kolumna > row[kolumna]){
                 wartosc_min_kolumna = row[kolumna];
             }
-        min_values.push_back(wartosc_min_kolumna);
         }
+        min_values.push_back(wartosc_min_kolumna);
     }
     return (min_values);
 }
