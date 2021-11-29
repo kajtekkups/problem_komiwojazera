@@ -54,8 +54,23 @@ cost_t CostMatrix::reduce_rows() {
  * @return Vector of minimum values in columns.
  */
 std::vector<cost_t> CostMatrix::get_min_values_in_cols() const {
-    std::vector<cost_t> min_values;
-    throw;  // TODO: Implement it!
+
+    std::vector<cost_t> min_values; //wektor wartosci minimalnych w kolumnach
+    int column_number = int(matrix_[0].size()); //liczba kolumn w macierzy
+
+    //podwojna petla sprawdzajaca najpierw w ktorej kolumnie jetesmy
+    //nastepnie najmniejsza wartosc w kazdej kolumnie
+    for(int kolumna = 0; kolumna < column_number; kolumna++){
+        int wartosc_min_kolumna = matrix_[0][0]; //pomocnicza zmienna
+
+        for(auto row: matrix_){
+            if(wartosc_min_kolumna > row[kolumna]){
+                wartosc_min_kolumna = row[kolumna];
+            }
+        min_values.push_back(wartosc_min_kolumna);
+        }
+    }
+    return (min_values);
 }
 
 /**
