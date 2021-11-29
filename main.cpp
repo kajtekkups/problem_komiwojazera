@@ -2,13 +2,12 @@
 
 #include <iostream>
 
-
 int main() {
-    cost_matrix_t cm = {{INF, 10, 8,   19, 12},
-                      {10, INF, 20,  6,  3},
-                      {8,   20, INF, 4,  2},
-                      {19,  6,  4, INF,  7},
-                      {12,  3,  2,   7, INF}};
+//    cost_matrix_t cm = {{INF, 10, 8,   19, 12},
+//                      {10, INF, 20,  6,  3},
+//                      {8,   20, INF, 4,  2},
+//                      {19,  6,  4, INF,  7},
+//                      {12,  3,  2,   7, INF}};
 
     /* Rozwiązania:
      * 32 : 2 3 4 1 0
@@ -40,16 +39,19 @@ int main() {
      * 19 : 1 2 0 3 4
     */
 
-    tsp_solutions_t solutions = solve_tsp(cm);
-
-
-    for (auto elem : solutions) {
-        std::cout << elem.lower_bound << " : ";
-        for (auto pelem : elem.path) {
-            std::cout << pelem << " ";
-        }
-        std::cout << "\n";
-    }
-
-    return EXIT_SUCCESS;
+//    tsp_solutions_t solutions = solve_tsp(cm);
+//
+//
+//    for (auto elem : solutions) {
+//        std::cout << elem.lower_bound << " : ";
+//        for (auto pelem : elem.path) {
+//            std::cout << pelem << " ";
+//        }
+//        std::cout << "\n";
+//    }
+//
+//    return EXIT_SUCCESS;
+    return 0;
 }
+
+

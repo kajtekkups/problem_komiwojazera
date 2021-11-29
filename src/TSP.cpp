@@ -32,7 +32,13 @@ path_t StageState::get_path() {
  * @return Vector of minimum values in row.
  */
 std::vector<cost_t> CostMatrix::get_min_values_in_rows() const {
-    throw;  // TODO: Implement it!
+    std::vector<cost_t> minimum_in_row;
+
+    for(auto row: matrix_){
+        int min = *std::min_element(std::begin(row), std::end(row));
+        minimum_in_row.push_back(min);
+    }
+    return minimum_in_row;
 }
 
 /**
