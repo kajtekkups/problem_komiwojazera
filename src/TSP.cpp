@@ -87,7 +87,20 @@ std::vector<cost_t> CostMatrix::get_min_values_in_cols() const {
  * @return Sum of values reduced in columns.
  */
 cost_t CostMatrix::reduce_cols() {
-    throw;  // TODO: Implement it!
+    std::vector<cost_t> min_value_col = CostMatrix::get_min_values_in_cols();
+    int matrix_size_col = int(min_value_col.size()); //ile kolumn w macierzy
+    int row_iter = 0; //bedzie sluzyl do kontrolowania numeru wiersza w petli for
+
+
+    for(auto row: matrix_){
+
+        for(int col_number = 0; col_number < matrix_size_col; col_number++){
+            matrix_[row_iter][col_number] -= min_value_col[col_number];
+        }
+        row_iter++;
+    }
+
+    return int(std::accumulate(min_value_col.begin(), min_value_col.end(), 0));
 }
 
 /**
@@ -97,9 +110,22 @@ cost_t CostMatrix::reduce_cols() {
  * @return The sum of minimal values in row and col, excluding the intersection value.
  */
 cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
-    throw;  // TODO: Implement it!
-}
 
+    std::vector<cost_t> row_values = matrix_[row]; //moga wystapic problemy
+    row_values.erase(row_values.begin() + col - 1);
+
+    int min_elm_row = *std::min_element(row_values.begin(), row_values.end());
+
+    std::vector<cost_t> column;
+    for (const auto &row_number: matrix_) {
+        column.push_back(row_number[col]);
+    }
+    column.erase(&column(row) );
+
+    int min_elm_col = *std::min_element(column.begin(), column.end());
+
+    return int(min_elm_col + min_elm_row);
+}
 /* PART 2 */
 
 /**
