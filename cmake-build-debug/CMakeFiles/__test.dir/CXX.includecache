@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/TSP.hpp
+vector
+-
+numeric
+-
+ostream
+-
+tsp_setup.hpp
+../include/tsp_setup.hpp
+
+../include/tsp_setup.hpp
+limits
+-
+vector
+-
+
+C:/Users/studia/Desktop/studia/informatyka/problem_komiwojazera/src/TSP.cpp
+TSP.hpp
+C:/Users/studia/Desktop/studia/informatyka/problem_komiwojazera/src/TSP.hpp
+algorithm
+-
+stack
+-
+optional
+-
+

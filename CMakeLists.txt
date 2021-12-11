@@ -3,6 +3,8 @@ project(implementation)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_compile_options(-Wall -Wextra  -Wpedantic -pedantic-errors -Wconversion) #-Werror
+
 # Przyjmij, że główny katalog z plikami frameworku GTF znajduje się
 # dwa katalogi wyżej względem katalogu projektu.
 set(GTEST_ROOT ../googletest-master)

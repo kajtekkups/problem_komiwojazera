@@ -48,6 +48,7 @@ public:
 
     cost_t reduce_rows();
     cost_t reduce_cols();
+    void change_to_inf(vertex_t new_vertex);
 
     std::vector<cost_t> get_min_values_in_rows() const;
     std::vector<cost_t> get_min_values_in_cols() const;
@@ -82,7 +83,7 @@ public:
     const unsorted_path_t& get_unsorted_path() const { return unsorted_path_; }
     void append_to_path(const vertex_t& v) { unsorted_path_.push_back(v); }
 
-    cost_t reduce_cost_matrix();
+    cost_t reduce_cost_matrix(int reduced_values = 0);
     NewVertex choose_new_vertex();
     void update_cost_matrix(vertex_t new_vertex);
 

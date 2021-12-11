@@ -4,6 +4,7 @@
 #include <stack>
 #include <optional>
 
+
 std::ostream& operator<<(std::ostream& os, const CostMatrix& cm) {
     for (std::size_t r = 0; r < cm.size(); ++r) {
         for (std::size_t c = 0; c < cm.size(); ++c) {
@@ -24,7 +25,21 @@ std::ostream& operator<<(std::ostream& os, const CostMatrix& cm) {
  * @return The vector of consecutive vertex.
  */
 path_t StageState::get_path() {
-    throw;  // TODO: Implement it!
+
+    unsorted_path_t unsorted_copy = unsorted_path_;
+    path_t scierzka = {unsorted_path_[0].row, unsorted_path_[0].col};
+
+    unsorted_copy.erase(unsorted_copy.begin());
+
+    while(scierzka.size() != unsorted_path_.size()+1){
+        for(auto vertex: unsorted_copy){
+
+            if (scierzka.back() == vertex.row){
+                scierzka.push_back(vertex.col);
+            }
+        }
+    }
+    return scierzka;
 }
 
 /**
@@ -47,10 +62,10 @@ std::vector<cost_t> CostMatrix::get_min_values_in_rows() const {
  */
 cost_t CostMatrix::reduce_rows() {
     std::vector<cost_t> min_value_vector =CostMatrix::get_min_values_in_rows(); //tworzy wektor minimalnych wartosci
-    int row_number = 0; //zmienna pomocnicza
+    std::size_t row_number = 0; //zmienna pomocnicza
     int row_size = int(matrix_[0].size());
     for(const auto& row: matrix_){
-        for(int element = 0; element < row_size; element++){
+        for(std::size_t element = 0; int(element) < row_size; element++){
             matrix_[row_number][element] -= min_value_vector[row_number];
         }
         row_number++;
@@ -69,7 +84,7 @@ std::vector<cost_t> CostMatrix::get_min_values_in_cols() const {
 
     //podwojna petla sprawdzajaca najpierw w ktorej kolumnie jetesmy
     //nastepnie najmniejsza wartosc w kazdej kolumnie
-    for(int kolumna = 0; kolumna < column_number; kolumna++){
+    for(std::size_t kolumna = 0; int(kolumna) < column_number; kolumna++){
         int wartosc_min_kolumna = matrix_[0][kolumna]; //pomocnicza zmienna
 
         for(auto row: matrix_){
@@ -95,7 +110,7 @@ cost_t CostMatrix::reduce_cols() {
     for(auto row: matrix_){
 
         for(int col_number = 0; col_number < matrix_size_col; col_number++){
-            matrix_[row_iter][col_number] -= min_value_col[col_number];
+            matrix_[std::size_t (row_iter)][std::size_t(col_number)] -= min_value_col[std::size_t(col_number)];
         }
         row_iter++;
     }
@@ -112,19 +127,36 @@ cost_t CostMatrix::reduce_cols() {
 cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
 
     std::vector<cost_t> row_values = matrix_[row]; //moga wystapic problemy
-    row_values.erase(row_values.begin() + col - 1);
 
-    int min_elm_row = *std::min_element(row_values.begin(), row_values.end());
+    row_values.erase(row_values.begin() + (long long)col); //usuwa wspolny element kolumny i wiersza
+
+    int min_elm_row = *std::min_element(row_values.begin(), row_values.end()); // szuka najmniejszego elementu w wierszu
 
     std::vector<cost_t> column;
     for (const auto &row_number: matrix_) {
         column.push_back(row_number[col]);
     }
-    column.erase(&column(row) );
+    column.erase(column.begin() + (long long)row);
 
     int min_elm_col = *std::min_element(column.begin(), column.end());
 
     return int(min_elm_col + min_elm_row);
+}
+
+void CostMatrix::change_to_inf(vertex_t new_vertex) {
+    auto row = new_vertex.row;
+    auto col = new_vertex.col;
+
+    for(size_t element = 0; element < matrix_[row].size(); element++){
+        matrix_[row][element] = INF;
+    }
+    for(size_t row_number = 0; row_number < matrix_.size(); row_number++){
+        matrix_[row_number][col] = INF;
+    }
+
+    //zabraniam przejscia powrotnego
+    matrix_[col][row] = INF;
+
 }
 /* PART 2 */
 
@@ -137,7 +169,29 @@ cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
  * @return The coordinates of the next vertex.
  */
 NewVertex StageState::choose_new_vertex() {
-    throw;  // TODO: Implement it!
+
+    vertex_t maximum_cost_vertex;
+    int maximum_cost_guard = -1;
+
+    //sprawdzamy gdzie są zera
+    for(std::size_t row_guard = 0; row_guard < (matrix_.get_matrix()).size(); row_guard++){
+        for(std::size_t col_guard = 0; col_guard < (matrix_.get_matrix())[0].size(); col_guard++){
+        //petle po elementach macierzy kosztow
+
+            // jezeli element = 0
+            if(matrix_.get_matrix()[row_guard][col_guard] == 0){
+
+                //jezeli koszt dla danego rzedu i kolumny jest wiekszy niz poprzedni
+                if(matrix_.get_vertex_cost(row_guard, col_guard) > maximum_cost_guard){
+
+                    maximum_cost_guard = matrix_.get_vertex_cost(row_guard, col_guard);
+                    maximum_cost_vertex = vertex_t(row_guard, col_guard);
+                }
+            }
+        }
+    }
+
+    return NewVertex(maximum_cost_vertex, maximum_cost_guard);
 }
 
 /**
@@ -145,15 +199,21 @@ NewVertex StageState::choose_new_vertex() {
  * @param new_vertex
  */
 void StageState::update_cost_matrix(vertex_t new_vertex) {
-    throw;  // TODO: Implement it!
+    matrix_.change_to_inf(new_vertex);
 }
 
 /**
  * Reduce the cost matrix.
  * @return The sum of reduced values.
  */
-cost_t StageState::reduce_cost_matrix() {
-    throw;  // TODO: Implement it!
+cost_t StageState::reduce_cost_matrix(int reduced_values) {
+    //int reduced_values = 0; //wartosc wszystkich zredukowanych elementow
+    reduced_values += matrix_.reduce_rows(); //redukuje wartosci w wierszach i zwraca sume zredukowanych wartosci
+    reduced_values += matrix_.reduce_cols();
+
+    lower_bound_ += reduced_values;
+
+    return reduced_values;
 }
 
 /**

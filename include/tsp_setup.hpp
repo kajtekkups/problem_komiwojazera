@@ -8,6 +8,7 @@
 #include <limits>
 #include <vector>
 
+
 /// The data type used to represent costs in the cost matrix.
 using cost_t = int;
 
