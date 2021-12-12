@@ -39,6 +39,7 @@ path_t StageState::get_path() {
             }
         }
     }
+
     return scierzka;
 }
 
@@ -64,12 +65,23 @@ cost_t CostMatrix::reduce_rows() {
     std::vector<cost_t> min_value_vector =CostMatrix::get_min_values_in_rows(); //tworzy wektor minimalnych wartosci
     std::size_t row_number = 0; //zmienna pomocnicza
     int row_size = int(matrix_[0].size());
+
+    for(std::size_t elem=0; elem < min_value_vector.size(); elem++){
+        if(min_value_vector[elem] == INF){
+            min_value_vector[elem] = 0;
+        }
+    }
+
     for(const auto& row: matrix_){
         for(std::size_t element = 0; int(element) < row_size; element++){
-            matrix_[row_number][element] -= min_value_vector[row_number];
+            if(matrix_[row_number][element] != INF){
+                matrix_[row_number][element] -= min_value_vector[row_number];
+            }
+
         }
         row_number++;
     }
+
     return std::accumulate(min_value_vector.begin(), min_value_vector.end(), 0);
 }
 
@@ -103,14 +115,21 @@ std::vector<cost_t> CostMatrix::get_min_values_in_cols() const {
  */
 cost_t CostMatrix::reduce_cols() {
     std::vector<cost_t> min_value_col = CostMatrix::get_min_values_in_cols();
-    int matrix_size_col = int(min_value_col.size()); //ile kolumn w macierzy
-    int row_iter = 0; //bedzie sluzyl do kontrolowania numeru wiersza w petli for
+    std::size_t matrix_size_col = min_value_col.size(); //ile kolumn w macierzy
+    std::size_t row_iter = 0; //bedzie sluzyl do kontrolowania numeru wiersza w petli for
 
+    for(std::size_t elem=0; elem < min_value_col.size(); elem++){
+        if(min_value_col[elem] == INF){
+            min_value_col[elem] = 0;
+        }
+    }
 
     for(auto row: matrix_){
 
-        for(int col_number = 0; col_number < matrix_size_col; col_number++){
-            matrix_[std::size_t (row_iter)][std::size_t(col_number)] -= min_value_col[std::size_t(col_number)];
+        for(std::size_t col_number = 0; col_number < matrix_size_col; col_number++){
+            if(matrix_[row_iter][col_number] != INF){
+                matrix_[row_iter][col_number] -= min_value_col[col_number];
+            }
         }
         row_iter++;
     }
@@ -132,21 +151,28 @@ cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
 
     int min_elm_row = *std::min_element(row_values.begin(), row_values.end()); // szuka najmniejszego elementu w wierszu
 
+    if(min_elm_row == INF){
+        min_elm_row = 0; // ustawia wartosc zabronionych przejsc na 0
+    }
     std::vector<cost_t> column;
     for (const auto &row_number: matrix_) {
-        column.push_back(row_number[col]);
+        column.push_back(row_number[col]); // tworzy wektor wartosci w kolumnie
     }
     column.erase(column.begin() + (long long)row);
 
     int min_elm_col = *std::min_element(column.begin(), column.end());
 
+    if(min_elm_col == INF){
+        min_elm_col = 0;
+    }
     return int(min_elm_col + min_elm_row);
 }
 
-void CostMatrix::change_to_inf(vertex_t new_vertex) {
+void CostMatrix::change_to_inf(vertex_t new_vertex, const std::vector<vertex_t>& zakaz_przejsc) {
     auto row = new_vertex.row;
     auto col = new_vertex.col;
 
+    //wykresla wiersz i kolumne
     for(size_t element = 0; element < matrix_[row].size(); element++){
         matrix_[row][element] = INF;
     }
@@ -154,9 +180,13 @@ void CostMatrix::change_to_inf(vertex_t new_vertex) {
         matrix_[row_number][col] = INF;
     }
 
-    //zabraniam przejscia powrotnego
-    matrix_[col][row] = INF;
+    //zakaz przejsc ze scierzki
+    for(auto vertex: zakaz_przejsc){
+        matrix_[vertex.row][vertex.col] = INF;
+    }
 
+    //zakaz przejscia odwrotnie
+    matrix_[col][row] = INF;
 }
 /* PART 2 */
 
@@ -199,19 +229,46 @@ NewVertex StageState::choose_new_vertex() {
  * @param new_vertex
  */
 void StageState::update_cost_matrix(vertex_t new_vertex) {
-    matrix_.change_to_inf(new_vertex);
+
+    //zabrania przejsc niebedacych w cyklu
+    unsorted_path_t unsorted_copy = unsorted_path_; //TODO: sprawdzic czy nie ma problemu
+    std::vector<vertex_t> zakazane_przejscia;
+
+    for(auto vertex_1: unsorted_copy){
+        for(auto vertex_2: unsorted_copy){
+
+            if(vertex_1.col == vertex_2.row) {
+                vertex_t zakaz_przejscia   (vertex_2.col, vertex_1.col);
+                vertex_t zakaz_przejscia_1 (vertex_2.col, vertex_1.row);
+                zakazane_przejscia.push_back(zakaz_przejscia);
+                zakazane_przejscia.push_back(zakaz_przejscia_1);
+
+                //sprawdzam kolejne cykle
+                for(auto vertex_3: unsorted_copy){
+                    if(vertex_2.col == vertex_3.row) {
+                        vertex_t zakaz_przejscia_2(vertex_3.col, vertex_1.row);
+                        vertex_t zakaz_przejscia_3(vertex_3.col, vertex_1.col);
+                        zakazane_przejscia.push_back(zakaz_przejscia_2);
+                        zakazane_przejscia.push_back(zakaz_przejscia_3);
+                    }
+                }
+            }
+        }
+    }
+
+    matrix_.change_to_inf(new_vertex, zakazane_przejscia);
+
 }
 
 /**
  * Reduce the cost matrix.
  * @return The sum of reduced values.
  */
-cost_t StageState::reduce_cost_matrix(int reduced_values) {
-    //int reduced_values = 0; //wartosc wszystkich zredukowanych elementow
+cost_t StageState::reduce_cost_matrix() {
+    int reduced_values = 0; //wartosc wszystkich zredukowanych elementow
     reduced_values += matrix_.reduce_rows(); //redukuje wartosci w wierszach i zwraca sume zredukowanych wartosci
     reduced_values += matrix_.reduce_cols();
 
-    lower_bound_ += reduced_values;
 
     return reduced_values;
 }
@@ -282,7 +339,7 @@ tsp_solutions_t solve_tsp(const cost_matrix_t& cm) {
 
     // The number of levels determines the number of steps before obtaining
     // a 2x2 matrix.
-    std::size_t n_levels = cm.size() - 2;
+    std::size_t n_levels = cm.size(); //TODO: bylo -2
 
     tree_lifo.push(left_branch);   // Use the first cost matrix as the root.
 
@@ -302,7 +359,7 @@ tsp_solutions_t solve_tsp(const cost_matrix_t& cm) {
             }
 
             // 1. Reduce the matrix in rows and columns.
-            cost_t new_cost = 0; // @TODO (KROK 1)
+            cost_t new_cost = left_branch.reduce_cost_matrix();
 
             // 2. Update the lower bound and check the break condition.
             left_branch.update_lower_bound(new_cost);
@@ -311,11 +368,13 @@ tsp_solutions_t solve_tsp(const cost_matrix_t& cm) {
             }
 
             // 3. Get new vertex and the cost of not choosing it.
-            NewVertex new_vertex = NewVertex(); // @TODO (KROK 2)
+            NewVertex new_vertex = left_branch.choose_new_vertex();
 
-            // 4. @TODO Update the path - use append_to_path method.
+            // 4.Update the path - use append_to_path method.
+            left_branch.append_to_path(new_vertex.coordinates);
 
-            // 5. @TODO (KROK 3) Update the cost matrix of the left branch.
+            // 5.(KROK 3) Update the cost matrix of the left branch.
+            left_branch.update_cost_matrix(new_vertex.coordinates);
 
             // 6. Update the right branch and push it to the LIFO.
             cost_t new_lower_bound = left_branch.get_lower_bound() + new_vertex.cost;

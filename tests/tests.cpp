@@ -105,27 +105,24 @@ TEST(CostMatrixTest, get_vertex_cost){
 
 TEST(StageStateTest, reduce_cost_matrix){
     cost_matrix_t x1 =
-            {{1, 2, 3, 8},
-             {5, 1, 2, 2},
-             {1, 2, 3, 0},
-             {1, 4, 3, 15}
-            };
+            {{INF, 10, 8,   19, 12},
+             {10, INF, 20,  6,  3},
+             {8,   20, INF, 4,  2},
+             {19,  6,  4, INF,  7},
+             {12,  3,  2,   7, INF}};
 
-    cost_matrix_t x2 =
-            {{1, 2, 3, 8},
-             {5, 1, 2, 2},
-             {1, 2, 0, 0},
-             {1, 4, 3, 15}
-            };
+    cost_matrix_t wynik =
+            {{INF, 1, 0,   9, 4},
+             {1, INF, 17,  1,  0},
+             {0,   17, INF, 0,  0},
+             {9,  1,  0, INF,  3},
+             {4,  0,  0,  3, INF}};
     //test 1
     CostMatrix macierz_kosztow(x1);
     StageState przyklad(macierz_kosztow);
-    //test 2
-    CostMatrix macierz_kosztow_2(x2);
-    StageState przyklad_2(macierz_kosztow_2);
 
-    ASSERT_EQ(przyklad.reduce_cost_matrix(), 4);
-    ASSERT_EQ(przyklad_2.reduce_cost_matrix(), 3);
+    ASSERT_EQ(przyklad.reduce_cost_matrix(), 28);
+    ASSERT_EQ(przyklad.get_matrix().get_matrix(), wynik);
 }
 
 TEST(StageStateTest, choose_new_vertex){
@@ -149,27 +146,30 @@ TEST(StageStateTest, choose_new_vertex){
 
 TEST(StageStateTest, update_cost_matrix){
     cost_matrix_t x1 =
-            {{0, 2, 3, 8},
-             {5, 0, 2, 2},
-             {1, 2, 3, 0},
-             {1, 4, 0, 15}
-            };
+            {{INF, 1, 0,   9,   4},
+             {1, INF, 17,  1,   0},
+             {0,  17, INF, 0,   0},
+             {9,  1,  0,   INF, 3},
+             {4,  0,  0,   3,   INF}};
 
 
     CostMatrix macierz_kosztow(x1);
     StageState klasa_wykonawcza(macierz_kosztow);
 
     cost_matrix_t wynik =
-            {{0, 2, INF, 8},
-             {INF, INF, INF, INF},
-             {1, INF, INF, 0},
-             {1, 4, INF, 15}
-            };
+            {{INF, 1,   INF,  9,   4},
+             {INF, INF, INF,  INF, INF},
+             {0,   INF,  INF,  0,   0},
+             {9,   1,   INF,  INF, 3},
+             {4,   0,   INF,  3,   INF}};
 
-    vertex_t vertex(1, 2);
-    klasa_wykonawcza.update_cost_matrix(vertex);
+    vertex_t vertex_1(1, 2);
+    klasa_wykonawcza.update_cost_matrix(vertex_1);
 
     ASSERT_EQ(klasa_wykonawcza.get_matrix().get_matrix(), wynik);
+
+    ASSERT_EQ(klasa_wykonawcza.reduce_cost_matrix(), 2);
+
 }
 
 TEST(StageStateTest, get_path){
@@ -198,6 +198,19 @@ TEST(StageStateTest, get_path){
     std::vector<std::size_t> wartosc_otrzymana = klasa_wykonawcza.get_path();
     ASSERT_EQ(wartosc_otrzymana, wynik);
 }
+
+TEST(Rozwiazania, rozwiazanie_1){
+    cost_matrix_t cm = {{INF, 10, 8,   19, 12},
+                  {10, INF, 20,  6,  3},
+                  {8,   20, INF, 4,  2},
+                  {19,  6,  4, INF,  7},
+                  {12,  3,  2,   7, INF}};
+
+    std::vector<size_t> wynik = {2, 3, 4, 1, 0};
+
+    ASSERT_EQ(solve_tsp(cm)[0].path, wynik);
+}
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
