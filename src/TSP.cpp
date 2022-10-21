@@ -168,26 +168,7 @@ cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
     return int(min_elm_col + min_elm_row);
 }
 
-void CostMatrix::change_to_inf(vertex_t new_vertex, const std::vector<vertex_t>& zakaz_przejsc) {
-    auto row = new_vertex.row;
-    auto col = new_vertex.col;
 
-    //wykresla wiersz i kolumne
-    for(size_t element = 0; element < matrix_[row].size(); element++){
-        matrix_[row][element] = INF;
-    }
-    for(size_t row_number = 0; row_number < matrix_.size(); row_number++){
-        matrix_[row_number][col] = INF;
-    }
-
-    //zakaz przejsc ze scierzki
-    for(auto vertex: zakaz_przejsc){
-        matrix_[vertex.row][vertex.col] = INF;
-    }
-
-    //zakaz przejscia odwrotnie
-    matrix_[col][row] = INF;
-}
 /* PART 2 */
 
 /**
@@ -256,8 +237,24 @@ void StageState::update_cost_matrix(vertex_t new_vertex) {
         }
     }
 
-    matrix_.change_to_inf(new_vertex, zakazane_przejscia);
+    auto row = new_vertex.row;
+    auto col = new_vertex.col;
 
+    //wykresla wiersz i kolumne
+    for(size_t element = 0; element < matrix_[row].size(); element++){
+        matrix_[row][element] = INF;
+    }
+    for(size_t row_number = 0; row_number < matrix_.size(); row_number++){
+        matrix_[row_number][col] = INF;
+    }
+
+    //zakaz przejsc ze scierzki
+    for(auto vertex: zakazane_przejscia){
+        matrix_[vertex.row][vertex.col] = INF;
+    }
+
+    //zakaz przejscia odwrotnie
+    matrix_[col][row] = INF;
 }
 
 /**
@@ -339,7 +336,7 @@ tsp_solutions_t solve_tsp(const cost_matrix_t& cm) {
 
     // The number of levels determines the number of steps before obtaining
     // a 2x2 matrix.
-    std::size_t n_levels = cm.size(); //TODO: bylo -2
+    std::size_t n_levels = cm.size() - 2; //TODO: bylo -2
 
     tree_lifo.push(left_branch);   // Use the first cost matrix as the root.
 

@@ -48,7 +48,7 @@ public:
 
     cost_t reduce_rows();
     cost_t reduce_cols();
-    void change_to_inf(vertex_t new_vertex, const std::vector<vertex_t>& zakaz_przejsc);
+
 
     std::vector<cost_t> get_min_values_in_rows() const;
     std::vector<cost_t> get_min_values_in_cols() const;
