@@ -26,12 +26,14 @@ std::ostream& operator<<(std::ostream& os, const CostMatrix& cm) {
  */
 path_t StageState::get_path() {
 
+    choose_last_two_vetrexes();
+
     unsorted_path_t unsorted_copy = unsorted_path_;
     path_t scierzka = {unsorted_path_[0].row, unsorted_path_[0].col};
 
     unsorted_copy.erase(unsorted_copy.begin());
 
-    while(scierzka.size() != unsorted_path_.size()+1){
+    while(scierzka.size() != unsorted_path_.size()){
         for(auto vertex: unsorted_copy){
 
             if (scierzka.back() == vertex.row){
@@ -205,6 +207,24 @@ NewVertex StageState::choose_new_vertex() {
     return NewVertex(maximum_cost_vertex, maximum_cost_guard);
 }
 
+
+void StageState::choose_last_two_vetrexes() {
+    // Reduce the matrix in rows and columns.
+    reduce_cost_matrix();
+
+    last_two_vertexes_t lastVertexes;
+    //sprawdzamy gdzie są zera
+    //petle po elementach macierzy kosztow
+    for(std::size_t row_guard = 0; row_guard < (matrix_.get_matrix()).size(); row_guard++){
+        for(std::size_t col_guard = 0; col_guard < (matrix_.get_matrix())[0].size(); col_guard++){
+
+            // jezeli element = 0
+            if(matrix_.get_matrix()[row_guard][col_guard] == 0){
+                    unsorted_path_.push_back(vertex_t(row_guard, col_guard));
+                }
+            }
+        }
+}
 /**
  * Update the cost matrix with the new vertex.
  * @param new_vertex

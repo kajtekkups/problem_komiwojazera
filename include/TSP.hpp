@@ -19,6 +19,7 @@ struct vertex_t {
     vertex_t(std::size_t r = 0, std::size_t c = 0) : row(r), col(c) {}
 };
 
+using last_two_vertexes_t = std::vector<vertex_t>;
 using unsorted_path_t = std::vector<vertex_t>;
 
 struct tsp_solution_t {
@@ -85,6 +86,7 @@ public:
 
     cost_t reduce_cost_matrix();
     NewVertex choose_new_vertex();
+    void choose_last_two_vetrexes();
     void update_cost_matrix(vertex_t new_vertex);
 
 private:

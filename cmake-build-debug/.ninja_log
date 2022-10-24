@@ -1,0 +1,22 @@
+# ninja log v5
+1	3465	6883037124104728	CMakeFiles/__test.dir/src/tsp_setup.cpp.obj	43ffb9cacd1053e1
+13	6715	6883037156801322	CMakeFiles/__test.dir/src/TSP.cpp.obj	d3e1bb8bf5bae84d
+7	14622	6883037235881559	CMakeFiles/__test.dir/tests/tests.cpp.obj	671a343db01a897e
+19	17256	6883037262490965	googletest-master/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj	24b99501bc4ffa11
+23	27838	6883037368086480	googletest-master/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	68af41765fab6f3b
+27843	31766	6883037407574572	lib/libgtestd.a	5d69b4531a22d75
+31767	32546	6883037415224183	lib/libgmockd.a	828a56e8e2ccb5db
+32546	39240	6883037482408332	__test.exe	d5f059f94fd5b2ac
+14	4443	6883037663448041	CMakeFiles/__test.dir/tests/tests.cpp.obj	671a343db01a897e
+4444	9706	6883037716079280	__test.exe	d5f059f94fd5b2ac
+11	2624	6883095567613876	CMakeFiles/__test.dir/src/TSP.cpp.obj	d3e1bb8bf5bae84d
+2625	6712	6883095608524175	__test.exe	d5f059f94fd5b2ac
+13	4033	6883097953052682	CMakeFiles/__test.dir/src/TSP.cpp.obj	d3e1bb8bf5bae84d
+4034	8221	6883097994986212	__test.exe	d5f059f94fd5b2ac
+11	11783	6883108992001497	CMakeFiles/__test.dir/src/TSP.cpp.obj	d3e1bb8bf5bae84d
+19	13329	6883109007751780	CMakeFiles/__test.dir/tests/tests.cpp.obj	671a343db01a897e
+13329	17824	6883109052754229	__test.exe	d5f059f94fd5b2ac
+14	4540	6883110042508484	CMakeFiles/__test.dir/src/TSP.cpp.obj	d3e1bb8bf5bae84d
+4541	8450	6883110081690141	__test.exe	d5f059f94fd5b2ac
+17	5633	6883110379836987	CMakeFiles/__test.dir/tests/tests.cpp.obj	671a343db01a897e
+5634	9547	6883110419137229	__test.exe	d5f059f94fd5b2ac

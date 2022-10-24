@@ -199,17 +199,17 @@ TEST(StageStateTest, get_path){
     ASSERT_EQ(wartosc_otrzymana, wynik);
 }
 
-//TEST(Rozwiazania, rozwiazanie_1){
-//    cost_matrix_t cm = {{INF, 10, 8,   19, 12},
-//                  {10, INF, 20,  6,  3},
-//                  {8,   20, INF, 4,  2},
-//                  {19,  6,  4, INF,  7},
-//                  {12,  3,  2,   7, INF}};
-//
-//    std::vector<size_t> wynik = {2, 3, 4, 1, 0};
-//
-//    ASSERT_EQ(solve_tsp(cm)[0].path, wynik);
-//}
+TEST(Rozwiazania, rozwiazanie_1){
+    cost_matrix_t cm = {{INF, 10, 8,   19, 12},
+                  {10, INF, 20,  6,  3},
+                  {8,   20, INF, 4,  2},
+                  {19,  6,  4, INF,  7},
+                  {12,  3,  2,   7, INF}};
+
+    std::vector<size_t> wynik = {0, 2, 3, 4, 1};
+
+    ASSERT_EQ(solve_tsp(cm)[0].path, wynik);
+}
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
