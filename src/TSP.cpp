@@ -62,7 +62,7 @@ std::vector<cost_t> CostMatrix::get_min_values_in_rows() const {
  * @return Sum of values reduced in rows.
  */
 cost_t CostMatrix::reduce_rows() {
-    std::vector<cost_t> min_value_vector =CostMatrix::get_min_values_in_rows(); //tworzy wektor minimalnych wartosci
+    std::vector<cost_t> min_value_vector = CostMatrix::get_min_values_in_rows(); //tworzy wektor minimalnych wartosci
     std::size_t row_number = 0; //zmienna pomocnicza
     int row_size = int(matrix_[0].size());
 
@@ -145,7 +145,7 @@ cost_t CostMatrix::reduce_cols() {
  */
 cost_t CostMatrix::get_vertex_cost(std::size_t row, std::size_t col) const {
 
-    std::vector<cost_t> row_values = matrix_[row]; //moga wystapic problemy
+    std::vector<cost_t> row_values = matrix_[row];
 
     row_values.erase(row_values.begin() + (long long)col); //usuwa wspolny element kolumny i wiersza
 
@@ -336,7 +336,7 @@ tsp_solutions_t solve_tsp(const cost_matrix_t& cm) {
 
     // The number of levels determines the number of steps before obtaining
     // a 2x2 matrix.
-    std::size_t n_levels = cm.size() - 2; //TODO: bylo -2
+    std::size_t n_levels = cm.size() - 2;
 
     tree_lifo.push(left_branch);   // Use the first cost matrix as the root.
 

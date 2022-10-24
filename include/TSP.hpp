@@ -93,7 +93,7 @@ private:
     cost_t lower_bound_;
 };
 
-//NewVertex choose_new_vertex(const CostMatrix& cm);
+
 cost_t get_optimal_cost(const path_t& optimal_path, const cost_matrix_t& m);
 StageState create_right_branch_matrix(cost_matrix_t m, vertex_t v, cost_t lb);
 tsp_solutions_t filter_solutions(tsp_solutions_t solutions);

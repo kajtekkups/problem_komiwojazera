@@ -1,0 +1,14 @@
+1. Sprawdzanie przejsc powrotnych
+2. sprawdzanie cyklu w wybranych parach
+3. sprawdzenie reszty rozwiązań:
+	rozwiazac pozostale, nie wybrane galezie, porownujac z pierwszym otrzymanym wynikiem
+	aktualizowac nieposortowana sciezke
+
+1. sprawdzic funkcje:
+-get_optimal_cost
+-create_right_branch_matrix
+-filter_solutions
+-solve_tsp
+
+Mam:
+rozwiazywanie lewej krawedzi

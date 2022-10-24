@@ -9,21 +9,6 @@ CMakeFiles/__test.dir/src/tsp_setup.cpp.obj: \
  ../include/tsp_setup.hpp \
  ../src/tsp_setup.cpp
 CMakeFiles/__test.dir/tests/tests.cpp.obj: \
- ../../googletest-master/googlemock/include/gmock/gmock-actions.h \
- ../../googletest-master/googlemock/include/gmock/gmock-cardinalities.h \
- ../../googletest-master/googlemock/include/gmock/gmock-function-mocker.h \
- ../../googletest-master/googlemock/include/gmock/gmock-matchers.h \
- ../../googletest-master/googlemock/include/gmock/gmock-more-actions.h \
- ../../googletest-master/googlemock/include/gmock/gmock-more-matchers.h \
- ../../googletest-master/googlemock/include/gmock/gmock-nice-strict.h \
- ../../googletest-master/googlemock/include/gmock/gmock-spec-builders.h \
- ../../googletest-master/googlemock/include/gmock/gmock.h \
- ../../googletest-master/googlemock/include/gmock/internal/custom/gmock-generated-actions.h \
- ../../googletest-master/googlemock/include/gmock/internal/custom/gmock-matchers.h \
- ../../googletest-master/googlemock/include/gmock/internal/custom/gmock-port.h \
- ../../googletest-master/googlemock/include/gmock/internal/gmock-internal-utils.h \
- ../../googletest-master/googlemock/include/gmock/internal/gmock-port.h \
- ../../googletest-master/googlemock/include/gmock/internal/gmock-pp.h \
  ../../googletest-master/googletest/include/gtest/gtest-death-test.h \
  ../../googletest-master/googletest/include/gtest/gtest-matchers.h \
  ../../googletest-master/googletest/include/gtest/gtest-message.h \
