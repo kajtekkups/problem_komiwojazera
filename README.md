@@ -1,8 +1,7 @@
-# problem_komiwojazera
+# traveling salesman problem
 
-Program pozwala rozwiązać problem komiwojazera, który polega na znalezieniu optymalnego cyklu w zadanym, pełnym grafie, który jest reprezentowany 
-przez macierz kosztów.
+Program solves traveling salesman problem, which is finding optimal cycle in given full graph, represented by cost matrix.
 
-Kod powstał w ramach zajęć - Zaawansowane progrmowanie obiektowe - na kierunku Automatyka i Robotyka (EAIIB)  
+Code was created during course - Zaawansowane progrmowanie obiektowe - Automatyka i Robotyka (EAIIB)  
 
-Aby rozwiązać zadany problem, należy utworzyć macierz kosztów, gdzie przejścia zabronione są oznaczone aliasem INF i wywołać funkcję solve_tsp zwracającą wektor optymalnych rozwiązań (patrz przykład Rozwiazania.rozwiazanie_1 w tests.c).
+In order to solve particular problem, cost matrix needs to be made (forbidden transition are represented by INF alias). Next, solve_tsp function can be used, return value is a vector containing optimal solutions (example is presented in tests.c -  Rozwiazania.rozwiazanie_1).
